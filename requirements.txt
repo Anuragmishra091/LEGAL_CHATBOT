@@ -1,0 +1,11 @@
+fitz  # PyMuPDF (sometimes installed as 'PyMuPDF')
+PyMuPDF
+tqdm
+numpy
+dataclasses; python_version < '3.7'
+python-dotenv
+nltk
+sentence-transformers
+chromadb
+openai
+streamlit
