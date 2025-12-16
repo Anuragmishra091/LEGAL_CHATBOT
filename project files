@@ -1,0 +1,316 @@
+📘 Legal Virtual Lawyer – India
+
+AI-powered legal assistant using BNS, BNSS, and BSA as the knowledge base
+Tech Stack: Python · FastAPI · Qdrant · RAG · Local/NVIDIA/OpenAI embeddings · PyMuPDF · VS Code + GitHub Copilot
+
+📌 Project Overview
+
+This project aims to build a Legal Virtual Lawyer for Indian law that can:
+
+Answer legal questions using authentic statutory content
+
+Retrieve and cite relevant sections from:
+
+Bharatiya Nyaya Sanhita (BNS)
+
+Bharatiya Nagarik Suraksha Sanhita (BNSS)
+
+Bharatiya Sakshya Adhiniyam (BSA)
+
+Provide structured guidance, explanations, and legal options
+
+Use a legal-agent workflow that activates when the user explicitly asks for “legal advice”
+
+Follow safety rules (no hallucinations, citations only from retrieved sections, disclaimers, etc.)
+
+This is not a fully-fledged lawyer, but a high-quality legal information and guidance system backed by RAG, embeddings, and LLM reasoning.
+
+🏗️ Project Architecture
+1. Knowledge Ingestion Layer
+
+Input: Official PDFs of BNS, BNSS, BSA
+
+Extraction using PyMuPDF
+
+Section detection via regex
+
+Clean, structured chunks with:
+
+act
+
+section
+
+heading
+
+chunk text
+
+source pages
+
+Embedding generation:
+
+Local (sentence-transformers)
+
+or OpenAI embeddings
+
+Storage in Qdrant Vector DB
+
+Script implemented:
+
+scripts/ingest_pdfs.py
+
+2. Retrieval Layer (RAG)
+
+User query → embed → similarity search in Qdrant
+
+Retrieve top-k statute chunks
+
+Passed to LLM for grounded reasoning
+
+Model must answer only using retrieved evidence
+
+Citations shown with section numbers + page references
+
+3. LLM Reasoning Layer
+
+Two modes:
+
+A) Assistant Mode
+
+For factual Q&A:
+
+“What does Section 120 of BNS say?”
+
+“What is the difference between FIR and complaint?”
+
+Uses RAG only
+
+Must cite sections used
+
+B) Legal-Agent Mode
+
+Triggered when user asks:
+
+“What should I do?”
+
+“Give me legal advice”
+
+“I am accused of ___, what next?”
+
+Agent performs:
+
+Intent detection
+
+Consent screen
+
+Collect facts (who, what, when, where)
+
+Retrieve statutory evidence
+
+Multi-step chain:
+
+Identify legal issues
+
+Map relevant sections
+
+Options + pros/cons
+
+Recommended next steps
+
+Risk flags (immediate danger or criminal liability)
+
+Output structured JSON
+
+4. Application Layer (FastAPI)
+
+(Not built yet — upcoming)
+
+Endpoints:
+
+/query — RAG + assistant mode
+
+/advice — activates legal agent
+
+/sections/{act}/{section} — direct statute lookup
+
+/health — service health
+
+5. UI Layer (Streamlit/React)
+
+(Not built yet — upcoming)
+
+Features:
+
+Chat interface
+
+Mode indicators (assistant vs agent)
+
+Consent panels
+
+Evidence viewer (PDF citation highlighting)
+
+Exportable chat transcript
+
+✔️ What Has Already Been Completed
+1) Virtual Environment Setup
+
+venv created for Python
+
+pip upgraded
+
+Dependencies installed
+
+2) Ingestion Pipeline (Completed)
+
+ingest_pdfs.py script generated
+
+Parses PDFs of BNS/BNSS/BSA
+
+Extracts section-wise content
+
+Chunks text
+
+Creates embeddings
+
+Stores vectors+metadata in Qdrant
+
+Outputs ingest_manifest.json
+
+3) Project Structure Finalized
+legal_ai_chatbot/
+│── venv/
+│── data/
+│   ├── BNS.pdf
+│   ├── BNSS.pdf
+│   ├── BSA.pdf
+│── scripts/
+│   ├── ingest_pdfs.py
+│── vectorstore/
+│── app/
+│   ├── main.py   ← will host FastAPI
+│── README.md
+
+4) Idea Validation
+
+We checked the Indian legal AI landscape and confirmed:
+✔ No existing system fully uses BNS+BNSS+BSA in a unified RAG legal-agent architecture
+✔ Your idea is unique and feasible
+✔ Many partial prototypes exist, but no production-ready equivalent
+
+⚙️ Setup Instructions
+1. Clone project
+git clone <your-repo-url>
+cd legal_ai_chatbot
+
+2. Create virtual environment
+python -m venv venv
+
+Activate (Windows)
+venv\Scripts\activate
+
+3. Install dependencies
+pip install -r requirements.txt
+
+4. Run Qdrant locally (Docker)
+docker run -p 6333:6333 -v qdrant_data:/qdrant/storage qdrant/qdrant
+
+5. Ingest statutes
+python scripts/ingest_pdfs.py \
+  --pdfs data/BNS.pdf data/BNSS.pdf data/BSA.pdf \
+  --act_names BNS BNSS BSA \
+  --provider local \
+  --qdrant_url http://localhost:6333 \
+  --qdrant_collection statutes_v1
+
+🚀 Roadmap (Next Steps)
+Phase 1 – Retrieval & API
+
+ Build query_demo.py for testing RAG results
+
+ Build FastAPI server
+
+ Implement /query endpoint (RAG)
+
+Phase 2 – Legal Agent
+
+ Implement explicit user consent
+
+ Fact-intake schema (structured)
+
+ Agent workflow (multi-step reasoning)
+
+ Safety layers + disclaimers
+
+ JSON structured legal advice output
+
+Phase 3 – UI
+
+ Streamlit or React chat UI
+
+ PDF snippet viewer (citations)
+
+ Agent mode badge
+
+ Session export (PDF/JSON)
+
+Phase 4 – Production
+
+ Logging & monitoring
+
+ Evaluate hallucinations
+
+ Add case-law retrieval (optional)
+
+ Add human-advocate escalation option
+
+🧠 Notes For GitHub Copilot
+
+This project involves:
+
+Python scripts for ingestion and retrieval
+
+Machine learning embeddings (local + cloud)
+
+A vector database (Qdrant)
+
+RAG-based LLM prompting
+
+Legal-agent logic with controlled reasoning
+
+PDF parsing and section extraction
+
+Architecture aligned with domain-specific laws (Indian statutes)
+
+Copilot should suggest:
+
+Regex improvements for section detection
+
+RAG improvements
+
+FastAPI endpoint generation
+
+Response formatting templates
+
+Streamlit/React UI code
+
+Testing scripts
+
+🤝 Contributions
+
+This repo is under active development.
+Contributions for:
+
+Better section extraction
+
+Improved embeddings
+
+UI improvements
+
+Safety layers
+
+Law-specific heuristics
+
+…are welcome.
+
+📜 License
+
+MIT (or choose whichever you prefer)
