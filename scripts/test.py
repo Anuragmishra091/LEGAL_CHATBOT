@@ -1,4 +1,4 @@
-from chatbot import LegalChatbot
+from main import LegalChatbot
 
 def test_queries():
     chatbot = LegalChatbot()

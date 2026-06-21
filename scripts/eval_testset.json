@@ -1,0 +1,122 @@
+[
+  {
+    "id": "CONST_01",
+    "question": "What does Article 21 of the Constitution guarantee?",
+    "expected_answer": "Article 21 guarantees protection of life and personal liberty. No person shall be deprived of his life or personal liberty except according to procedure established by law.",
+    "expected_sources": ["Art.21"],
+    "category": "constitution",
+    "expected_keywords": ["life", "personal liberty", "procedure established by law"]
+  },
+  {
+    "id": "CONST_02",
+    "question": "What are the fundamental rights under Part III?",
+    "expected_answer": "Part III guarantees fundamental rights including: Right to Equality (Art.14-18), Right to Freedom (Art.19-22), Right against Exploitation (Art.23-24), Right to Freedom of Religion (Art.25-28), Cultural and Educational Rights (Art.29-30), Right to Constitutional Remedies (Art.32).",
+    "expected_sources": ["Art.14", "Art.19", "Art.21", "Art.32"],
+    "category": "constitution",
+    "expected_keywords": ["equality", "freedom", "exploitation", "religion", "remedies"]
+  },
+  {
+    "id": "CONST_03",
+    "question": "Can fundamental rights be suspended during emergency?",
+    "expected_answer": "Yes. Under Article 358, rights under Article 19 are automatically suspended during a Proclamation of Emergency under Article 352. Under Article 359, the President may suspend the right to move courts for enforcement of fundamental rights (except Articles 20 and 21).",
+    "expected_sources": ["Art.358", "Art.359", "Art.352", "Art.19"],
+    "category": "constitution",
+    "expected_keywords": ["suspend", "emergency", "352", "358", "359", "article 19", "article 20", "article 21"]
+  },
+  {
+    "id": "CONST_04",
+    "question": "What is the amendment procedure of the Constitution?",
+    "expected_answer": "Article 368 provides the power and procedure for amendment. A Bill must be passed in each House of Parliament by a majority of total membership and by a majority of not less than two-thirds of members present and voting. Certain provisions also require ratification by Legislatures of not less than one-half of the States.",
+    "expected_sources": ["Art.368"],
+    "category": "constitution",
+    "expected_keywords": ["368", "two-thirds", "majority", "parliament", "ratification"]
+  },
+  {
+    "id": "CONST_05",
+    "question": "What is the right to equality under the Constitution?",
+    "expected_answer": "Article 14 guarantees equality before law and equal protection of laws. Article 15 prohibits discrimination on grounds of religion, race, caste, sex or place of birth. Article 16 provides equality of opportunity in public employment. Article 17 abolishes untouchability. Article 18 abolishes titles.",
+    "expected_sources": ["Art.14", "Art.15", "Art.16", "Art.17", "Art.18"],
+    "category": "constitution",
+    "expected_keywords": ["equality", "discrimination", "14", "15", "16", "untouchability"]
+  },
+  {
+    "id": "BNS_01",
+    "question": "What is the punishment for murder under BNS?",
+    "expected_answer": "Under BNS Section 101 (corresponding to old IPC Section 302), whoever commits murder shall be punished with death or imprisonment for life, and shall also be liable to fine.",
+    "expected_sources": ["BNS"],
+    "category": "bns",
+    "expected_keywords": ["murder", "death", "imprisonment for life", "fine"]
+  },
+  {
+    "id": "BNS_02",
+    "question": "What is the definition of theft under BNS?",
+    "expected_answer": "Theft is defined as whoever intending to take dishonestly any movable property out of the possession of any person without that person's consent, moves that property.",
+    "expected_sources": ["BNS"],
+    "category": "bns",
+    "expected_keywords": ["dishonestly", "movable property", "possession", "consent"]
+  },
+  {
+    "id": "BNSS_01",
+    "question": "What are the provisions for bail under BNSS?",
+    "expected_answer": "BNSS provides for bail in bailable offences as a matter of right. In non-bailable offences, bail may be granted at the discretion of the court. The court considers factors like nature of accusation, severity of punishment, and likelihood of fleeing justice.",
+    "expected_sources": ["BNSS"],
+    "category": "bnss",
+    "expected_keywords": ["bail", "bailable", "non-bailable", "discretion", "court"]
+  },
+  {
+    "id": "BNSS_02",
+    "question": "How to file an FIR under BNSS?",
+    "expected_answer": "Under BNSS, information about commission of a cognizable offence can be given orally or in writing to an officer in charge of a police station. If given orally, it shall be reduced to writing and signed by the informant. A copy shall be given to the informant free of cost.",
+    "expected_sources": ["BNSS"],
+    "category": "bnss",
+    "expected_keywords": ["FIR", "cognizable", "police station", "writing", "informant"]
+  },
+  {
+    "id": "JDG_01",
+    "question": "What did the Supreme Court decide in the Union Carbide Bhopal gas case regarding compensation?",
+    "expected_answer": "The Supreme Court reviewed the settlement of the Bhopal gas case where Union Carbide Corporation was involved. The case dealt with compensation for victims of the gas leak disaster.",
+    "expected_sources": ["SUPREME_COURT_JUDGMENT"],
+    "category": "judgment",
+    "expected_keywords": ["union carbide", "bhopal", "compensation", "settlement"]
+  },
+  {
+    "id": "JDG_02",
+    "question": "What is the Supreme Court's position on contempt of court by an advocate?",
+    "expected_answer": "The Supreme Court has held that advocates can be held in contempt of court for conduct that scandalizes the court or interferes with the administration of justice.",
+    "expected_sources": ["SUPREME_COURT_JUDGMENT"],
+    "category": "judgment",
+    "expected_keywords": ["contempt", "advocate", "court"]
+  },
+  {
+    "id": "JDG_03",
+    "question": "What are the Supreme Court guidelines on land acquisition and compensation?",
+    "expected_answer": "The Supreme Court has laid down that compensation for land acquisition must be fair and reflect the market value of the land. Delay in payment requires interest. The acquired party has right to enhanced compensation.",
+    "expected_sources": ["SUPREME_COURT_JUDGMENT"],
+    "category": "judgment",
+    "expected_keywords": ["land acquisition", "compensation", "market value"]
+  },
+  {
+    "id": "CROSS_01",
+    "question": "What is the right to life under Article 21 and how have courts interpreted it?",
+    "expected_answer": "Article 21 states no person shall be deprived of life or personal liberty except according to procedure established by law. The Supreme Court has expansively interpreted this to include right to livelihood, right to privacy, right to health, right to clean environment, and right to dignity.",
+    "expected_sources": ["Art.21", "SUPREME_COURT_JUDGMENT"],
+    "category": "cross_domain",
+    "expected_keywords": ["article 21", "life", "liberty", "procedure established by law"]
+  },
+  {
+    "id": "CONST_06",
+    "question": "What are directive principles of state policy?",
+    "expected_answer": "Directive Principles under Part IV (Articles 36-51) are guidelines for the state to establish social and economic democracy. They include securing adequate livelihood, equal pay for equal work, free legal aid, uniform civil code, and protection of environment. They are not enforceable by courts but are fundamental in governance.",
+    "expected_sources": ["Art.39", "Art.41", "Art.44"],
+    "category": "constitution",
+    "expected_keywords": ["directive", "Part IV", "not enforceable", "state policy", "social", "economic"]
+  },
+  {
+    "id": "BSA_01",
+    "question": "What are the provisions related to evidence under BSA?",
+    "expected_answer": "The Bharatiya Sakshya Adhiniyam (BSA) deals with relevancy of facts, admissions, confessions, documentary evidence, oral evidence, burden of proof, and examination of witnesses.",
+    "expected_sources": ["BSA"],
+    "category": "bsa",
+    "expected_keywords": ["evidence", "relevancy", "witness", "proof", "document"]
+  }
+]

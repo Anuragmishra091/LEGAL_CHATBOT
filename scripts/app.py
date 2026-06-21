@@ -1,61 +1,113 @@
-import streamlit as st
+from flask import Flask, request, jsonify, render_template
 from main import LegalChatbot
+import json
+import threading
+from pathlib import Path
 
-st.set_page_config(page_title="Indian Legal Chatbot", page_icon="⚖️")
+app = Flask(__name__)
 
-# Initialize chatbot
-@st.cache_resource
-def load_chatbot():
-    return LegalChatbot()
+# Initialise chatbot once at startup
+chatbot = LegalChatbot()
+
+# ── Eval state (shared across threads) ──────────────────────────────────────
+_eval_state: dict = {"status": "idle", "progress": 0, "total": 0, "error": None}
+_eval_lock = threading.Lock()
 
 
+@app.route("/")
+def index():
+    return render_template("index.html")
 
-## Aise hi
-chatbot = load_chatbot()
 
-st.title("⚖️ Indian Legal Chatbot")
-st.caption("Powered by BNS, BNSS & BSA + RAG")  # Updated caption
-
-# Sidebar with info
-with st.sidebar:
-    st.header("📚 Legal Documents")
-    st.write("This chatbot covers:")
-    st.write("- **BNS** - Bharatiya Nyaya Sanhita (Criminal Law)")
-    st.write("- **BNSS** - Bharatiya Nagarik Suraksha Sanhita (Criminal Procedure)")
-    st.write("- **BSA** - Bharatiya Sakshya Adhiniyam (Evidence Law)")
-    st.divider()
-    st.caption("These replaced IPC, CrPC & Evidence Act in 2024")
-
-# Chat interface
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-# Display chat history
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
-
-# User input
-if prompt := st.chat_input("Ask a legal question..."):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
+@app.route("/chat", methods=["POST"])
+def chat():
+    data = request.get_json(force=True)
+    question = (data.get("question") or "").strip()
+    chat_history = data.get("chat_history", [])  # list of {role, content}
     
-    with st.chat_message("assistant"):
-        with st.spinner("Searching legal database..."):
-            result = chatbot.ask(prompt)
-        
-        st.markdown(result['answer'])
-        
-        # Show sources in expander
-        with st.expander("📚 View Sources"):
-            for i, src in enumerate(result['sources'], 1):
-                st.write(f"**{i}. {src['act']}, Section {src['section']}**")
-                st.write(f"Relevance: {src['relevance_score']:.2%}")
-                st.caption(src['text'][:300] + "...")
-                st.divider()
-    
-    st.session_state.messages.append({
-        "role": "assistant", 
-        "content": result['answer']
+    if not question:
+       return jsonify({"error": "No question provided"}), 400
+
+    result = chatbot.ask(
+        question,
+        chat_history=chat_history if chat_history else None,
+    )
+
+    # Keep only serialisable fields from sources
+    sources = [
+        {
+            "act": s["act"],
+            "section": s["section"],
+            "heading": s["heading"],
+            "relevance_score": round(s["relevance_score"], 4),
+            "text": s["text"][:300],
+        }
+        for s in result["sources"]
+    ]
+
+    return jsonify({
+        "answer": result["answer"],
+        "sources": sources,
+        "context_used": result["context_used"],
     })
+
+
+# ── Evaluation endpoints ─────────────────────────────────────────────────────
+
+@app.route("/eval/run", methods=["POST"])
+def eval_run():
+    data = request.get_json(force=True) or {}
+    limit    = data.get("limit")
+    category = data.get("category") or None
+    skip_llm = bool(data.get("skip_llm", False))
+
+    with _eval_lock:
+        if _eval_state["status"] == "running":
+            return jsonify({"error": "Evaluation already running"}), 409
+        _eval_state.update({"status": "running", "progress": 0, "total": 0, "error": None})
+
+    def _run():
+        import sys
+        sys.path.insert(0, str(Path(__file__).parent))
+        from eval_runner import run_evaluation
+
+        def _progress(done, total):
+            with _eval_lock:
+                _eval_state["progress"] = done
+                _eval_state["total"]    = total
+
+        try:
+            run_evaluation(
+                limit=limit,
+                category=category,
+                skip_llm=skip_llm,
+                chatbot=chatbot,
+                on_progress=_progress,
+            )
+            with _eval_lock:
+                _eval_state["status"] = "done"
+        except Exception as exc:
+            with _eval_lock:
+                _eval_state.update({"status": "error", "error": str(exc)})
+
+    threading.Thread(target=_run, daemon=True).start()
+    return jsonify({"status": "started"})
+
+
+@app.route("/eval/status")
+def eval_status():
+    with _eval_lock:
+        return jsonify(dict(_eval_state))
+
+
+@app.route("/eval/results")
+def eval_results_route():
+    results_path = Path(__file__).parent / "eval_results.json"
+    if results_path.exists():
+        with open(results_path, "r", encoding="utf-8") as f:
+            return jsonify(json.load(f))
+    return jsonify({"error": "No results yet. Run evaluation first."}), 404
+
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)

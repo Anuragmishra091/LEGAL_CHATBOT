@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indian Legal Chatbot</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f1117;
+      color: #e8e8e8;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 260px;
+      min-width: 260px;
+      background: #1a1d27;
+      border-right: 1px solid #2d3147;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 18px;
+      gap: 16px;
+    }
+    .sidebar h2 {
+      font-size: 1.1rem;
+      color: #c9a84c;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sidebar p { font-size: 0.82rem; color: #9ca3af; line-height: 1.6; }
+    .law-item {
+      background: #252840;
+      border-left: 3px solid #c9a84c;
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+    .law-item strong { font-size: 0.85rem; color: #e8d5a0; display: block; }
+    .law-item span { font-size: 0.76rem; color: #9ca3af; }
+    .sidebar-note {
+      margin-top: auto;
+      font-size: 0.75rem;
+      color: #6b7280;
+      border-top: 1px solid #2d3147;
+      padding-top: 14px;
+      line-height: 1.5;
+    }
+    .clear-btn {
+      background: #2d1f1f;
+      color: #f87171;
+      border: 1px solid #7f1d1d;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      width: 100%;
+      transition: background 0.2s;
+    }
+    .clear-btn:hover { background: #3d2020; }
+
+    /* ── Main chat area ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    header {
+      padding: 18px 24px;
+      border-bottom: 1px solid #2d3147;
+      background: #1a1d27;
+    }
+
+    #chat-window {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      scroll-behavior: smooth;
+    }
+    #chat-window::-webkit-scrollbar { width: 6px; }
+    #chat-window::-webkit-scrollbar-thumb { background: #2d3147; border-radius: 3px; }
+
+    /* ── Messages ── */
+    .message { display: flex; gap: 12px; max-width: 820px; }
+    .message.user { align-self: flex-end; flex-direction: row-reverse; }
+    .message.assistant { align-self: flex-start; }
+
+    .avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .user .avatar { background: #3b4fd8; }
+    .assistant .avatar { background: #c9a84c; color: #1a1d27; }
+
+    .bubble {
+      padding: 12px 16px;
+      border-radius: 14px;
+      line-height: 1.65;
+      font-size: 0.9rem;
+      max-width: 680px;
+    }
+    .user .bubble {
+      background: #2a3160;
+      border-bottom-right-radius: 4px;
+    }
+    .assistant .bubble {
+      background: #1e2235;
+      border-bottom-left-radius: 4px;
+      border: 1px solid #2d3147;
+    }
+    .bubble p { margin-bottom: 8px; }
+    .bubble p:last-child { margin-bottom: 0; }
+
+    /* ── Sources ── */
+    .sources-toggle {
+      margin-top: 10px;
+      background: none;
+      border: 1px solid #3a3f5c;
+      color: #9ca3af;
+      border-radius: 6px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .sources-toggle:hover { border-color: #c9a84c; color: #c9a84c; }
+    .sources-list {
+      display: none;
+      margin-top: 8px;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .sources-list.open { display: flex; }
+    .source-card {
+      background: #252840;
+      border-left: 3px solid #c9a84c;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.78rem;
+    }
+    .source-card strong { color: #e8d5a0; display: block; margin-bottom: 4px; }
+    .source-card .relevance { color: #6b7280; font-size: 0.72rem; margin-bottom: 4px; }
+    .source-card .excerpt { color: #9ca3af; line-height: 1.5; }
+
+    /* ── Typing indicator ── */
+    .typing .bubble { display: flex; align-items: center; gap: 5px; padding: 14px 18px; }
+    .dot {
+      width: 7px; height: 7px;
+      background: #c9a84c;
+      border-radius: 50%;
+      animation: bounce 1.2s infinite ease-in-out;
+    }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+      40% { transform: translateY(-6px); opacity: 1; }
+    }
+
+    /* ── Input bar ── */
+    .input-bar {
+      padding: 16px 24px;
+      border-top: 1px solid #2d3147;
+      background: #1a1d27;
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+    #user-input {
+      flex: 1;
+      background: #252840;
+      border: 1px solid #2d3147;
+      border-radius: 10px;
+      color: #e8e8e8;
+      font-size: 0.9rem;
+      padding: 12px 16px;
+      resize: none;
+      outline: none;
+      max-height: 130px;
+      overflow-y: auto;
+      font-family: inherit;
+      line-height: 1.5;
+      transition: border-color 0.2s;
+    }
+    #user-input:focus { border-color: #c9a84c; }
+    #user-input::placeholder { color: #4b5563; }
+    #send-btn {
+      background: #c9a84c;
+      color: #1a1d27;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 18px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 700;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    #send-btn:hover { background: #e2c068; }
+    #send-btn:disabled { background: #4b5563; cursor: not-allowed; }
+
+    /* ── Welcome placeholder ── */
+    .welcome {
+      margin: auto;
+      text-align: center;
+      color: #4b5563;
+    }
+    .welcome .icon { font-size: 3rem; margin-bottom: 12px; }
+    .welcome h3 { font-size: 1.1rem; margin-bottom: 6px; color: #6b7280; }
+    .welcome p { font-size: 0.85rem; }
+
+    /* ── Eval Dashboard ── */
+    header { display: flex; justify-content: space-between; align-items: center; }
+    .header-left h1 { font-size: 1.25rem; color: #e8d5a0; }
+    .header-left p  { font-size: 0.8rem; color: #6b7280; margin-top: 2px; }
+    .header-tabs { display: flex; gap: 6px; flex-shrink: 0; }
+    .tab-btn {
+      background: transparent;
+      border: 1px solid #3a3f5c;
+      color: #9ca3af;
+      border-radius: 8px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { border-color: #c9a84c; color: #c9a84c; }
+    .tab-btn.active { background: #c9a84c; color: #1a1d27; border-color: #c9a84c; font-weight: 600; }
+
+    #eval-panel {
+      display: none;
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .eval-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      background: #1e2235;
+      border: 1px solid #2d3147;
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .eval-controls select {
+      background: #252840;
+      border: 1px solid #2d3147;
+      color: #e8e8e8;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 0.82rem;
+      outline: none;
+    }
+    .eval-controls select:focus { border-color: #c9a84c; }
+    .eval-checkbox { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: #9ca3af; cursor: pointer; }
+    .eval-checkbox input { accent-color: #c9a84c; }
+    #eval-run-btn {
+      background: #c9a84c;
+      color: #1a1d27;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 18px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 700;
+      transition: background 0.2s;
+      margin-left: auto;
+    }
+    #eval-run-btn:hover { background: #e2c068; }
+    #eval-run-btn:disabled { background: #4b5563; cursor: not-allowed; }
+    .eval-load-btn {
+      background: #252840;
+      border: 1px solid #3a3f5c;
+      color: #9ca3af;
+      border-radius: 8px;
+      padding: 7px 14px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      transition: all 0.2s;
+    }
+    .eval-load-btn:hover { border-color: #c9a84c; color: #c9a84c; }
+    .eval-status-text { font-size: 0.85rem; color: #9ca3af; margin-bottom: 8px; }
+    .eval-progress-bar { height: 8px; background: #252840; border-radius: 4px; overflow: hidden; }
+    .eval-progress-fill {
+      height: 100%;
+      background: #c9a84c;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+    .eval-overall {
+      background: #1e2235;
+      border: 1px solid #2d3147;
+      border-radius: 10px;
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .eval-overall-label { font-size: 0.82rem; color: #9ca3af; }
+    .eval-overall-score { font-size: 2.8rem; font-weight: 700; color: #c9a84c; line-height: 1; }
+    .eval-overall-sub   { font-size: 0.76rem; color: #6b7280; margin-top: 4px; }
+    .eval-section {
+      background: #1e2235;
+      border: 1px solid #2d3147;
+      border-radius: 10px;
+      padding: 16px 20px;
+    }
+    .eval-section-title {
+      font-size: 0.72rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .metric-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .metric-name { font-size: 0.82rem; color: #e8d5a0; width: 190px; flex-shrink: 0; }
+    .metric-bar-wrap { flex: 1; height: 10px; background: #252840; border-radius: 5px; overflow: hidden; }
+    .metric-bar-fill { height: 100%; border-radius: 5px; transition: width 0.6s ease; }
+    .metric-bar-fill.low  { background: #ef4444; }
+    .metric-bar-fill.mid  { background: #f59e0b; }
+    .metric-bar-fill.high { background: #22c55e; }
+    .metric-score { font-size: 0.82rem; color: #e8e8e8; width: 42px; text-align: right; flex-shrink: 0; }
+    .metric-range { font-size: 0.72rem; color: #4b5563; width: 90px; text-align: right; flex-shrink: 0; }
+    .category-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+    .category-pill {
+      background: #252840;
+      border: 1px solid #3a3f5c;
+      border-radius: 8px;
+      padding: 8px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 100px;
+    }
+    .category-pill .cat-name  { font-size: 0.78rem; color: #e8d5a0; font-weight: 600; }
+    .category-pill .cat-score { font-size: 1.2rem; color: #c9a84c; font-weight: 700; }
+    .category-pill .cat-count { font-size: 0.7rem; color: #6b7280; }
+    .eval-toggle-details {
+      background: #252840;
+      border: 1px solid #3a3f5c;
+      color: #9ca3af;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+    .eval-toggle-details:hover { border-color: #c9a84c; color: #c9a84c; }
+    .eval-detail-table { width: 100%; border-collapse: collapse; margin-top: 4px; font-size: 0.78rem; }
+    .eval-detail-table th {
+      text-align: left;
+      color: #6b7280;
+      padding: 6px 8px;
+      border-bottom: 1px solid #2d3147;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .eval-detail-table td {
+      padding: 7px 8px;
+      border-bottom: 1px solid #1a1d27;
+      color: #9ca3af;
+      vertical-align: top;
+    }
+    .eval-detail-table tr:hover td { background: #252840; }
+    .eval-detail-table .question-cell { color: #e8e8e8; max-width: 280px; }
+    .eval-detail-table .score-cell   { font-weight: 600; white-space: nowrap; }
+  </style>
+</head>
+<body>
+
+<!-- ── Sidebar ── -->
+<aside class="sidebar">
+  <h2>⚖️ Legal Documents</h2>
+  <p>This chatbot covers Indian criminal law statutes enacted in 2024:</p>
+
+  <div class="law-item">
+    <strong>BNS</strong>
+    <span>Bharatiya Nyaya Sanhita — Criminal Law</span>
+  </div>
+  <div class="law-item">
+    <strong>BNSS</strong>
+    <span>Bharatiya Nagarik Suraksha Sanhita — Criminal Procedure</span>
+  </div>
+  <div class="law-item">
+    <strong>BSA</strong>
+    <span>Bharatiya Sakshya Adhiniyam — Evidence Law</span>
+  </div>
+
+  <button class="clear-btn" onclick="clearChat()">🗑 Clear Conversation</button>
+
+  <p class="sidebar-note">These statutes replaced the IPC, CrPC and Indian Evidence Act in 2024.</p>
+</aside>
+
+<!-- ── Main ── -->
+<div class="main">
+  <header>
+    <div class="header-left">
+      <h1>⚖️ Indian Legal Chatbot</h1>
+      <p>Powered by BNS, BNSS &amp; BSA + RAG</p>
+    </div>
+    <div class="header-tabs">
+      <button class="tab-btn active" data-tab="chat"  onclick="switchTab('chat')">💬 Chat</button>
+      <button class="tab-btn"        data-tab="eval"  onclick="switchTab('eval')">📊 Evaluation</button>
+    </div>
+  </header>
+
+  <div id="chat-window">
+    <div class="welcome" id="welcome-msg">
+      <div class="icon">⚖️</div>
+      <h3>Ask a legal question</h3>
+      <p>Questions about bail, FIR, evidence, cognisable offences and more.</p>
+    </div>
+  </div>
+
+  <div class="input-bar">
+    <textarea id="user-input" rows="1" placeholder="Ask a legal question…"></textarea>
+    <button id="send-btn" onclick="sendMessage()">➤</button>
+  </div>
+
+  <!-- ── Eval Dashboard Panel ── -->
+  <div id="eval-panel">
+
+    <!-- Controls -->
+    <div class="eval-controls">
+      <select id="eval-category">
+        <option value="">All Categories</option>
+        <option value="constitution">Constitution</option>
+        <option value="bns">BNS</option>
+        <option value="bnss">BNSS</option>
+        <option value="bsa">BSA</option>
+        <option value="judgment">Judgment</option>
+        <option value="cross_domain">Cross Domain</option>
+      </select>
+      <select id="eval-limit">
+        <option value="">All Questions</option>
+        <option value="3">3 Questions</option>
+        <option value="5">5 Questions</option>
+        <option value="10">10 Questions</option>
+      </select>
+      <label class="eval-checkbox">
+        <input type="checkbox" id="eval-skip-llm" checked>
+        Skip LLM Faithfulness
+      </label>
+      <button class="eval-load-btn" onclick="loadResults()">↻ Load Previous</button>
+      <button id="eval-run-btn" onclick="runEval()">▶ Run Evaluation</button>
+    </div>
+
+    <!-- Progress -->
+    <div id="eval-progress-section" style="display:none;">
+      <div class="eval-status-text" id="eval-status-text">Initializing…</div>
+      <div class="eval-progress-bar">
+        <div class="eval-progress-fill" id="eval-progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="eval-results" style="display:none;">
+
+      <!-- Overall -->
+      <div class="eval-overall">
+        <div>
+          <div class="eval-overall-label">OVERALL SCORE</div>
+          <div class="eval-overall-score" id="eval-overall-score">—</div>
+          <div class="eval-overall-sub"  id="eval-overall-sub"></div>
+        </div>
+      </div>
+
+      <!-- Metrics -->
+      <div class="eval-section">
+        <div class="eval-section-title">Metrics</div>
+        <div id="eval-metrics-list"></div>
+      </div>
+
+      <!-- Categories -->
+      <div class="eval-section" id="eval-categories-section" style="display:none;">
+        <div class="eval-section-title">By Category</div>
+        <div id="eval-categories-list" class="category-pills"></div>
+      </div>
+
+      <!-- Question details -->
+      <div class="eval-section">
+        <div class="eval-section-title">
+          Question Details
+          <button class="eval-toggle-details" onclick="toggleDetails(this)">Show ▼</button>
+        </div>
+        <div id="eval-details-table" style="display:none;"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // In-memory chat history sent to backend with every request
+  const chatHistory = [];
+
+  const chatWindow = document.getElementById('chat-window');
+  const inputEl    = document.getElementById('user-input');
+  const sendBtn    = document.getElementById('send-btn');
+
+  // Auto-grow textarea
+  inputEl.addEventListener('input', () => {
+    inputEl.style.height = 'auto';
+    inputEl.style.height = Math.min(inputEl.scrollHeight, 130) + 'px';
+  });
+
+  // Send on Enter (Shift+Enter = newline)
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+
+  function removeWelcome() {
+    const w = document.getElementById('welcome-msg');
+    if (w) w.remove();
+  }
+
+  function scrollBottom() {
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+
+  function appendMessage(role, text) {
+    removeWelcome();
+    const wrap = document.createElement('div');
+    wrap.className = `message ${role}`;
+    wrap.innerHTML = `
+      <div class="avatar">${role === 'user' ? '👤' : '⚖️'}</div>
+      <div class="bubble">${formatText(text)}</div>`;
+    chatWindow.appendChild(wrap);
+    scrollBottom();
+    return wrap;
+  }
+
+  function showTyping() {
+    removeWelcome();
+    const wrap = document.createElement('div');
+    wrap.className = 'message assistant typing';
+    wrap.id = 'typing-indicator';
+    wrap.innerHTML = `
+      <div class="avatar">⚖️</div>
+      <div class="bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+    chatWindow.appendChild(wrap);
+    scrollBottom();
+  }
+
+  function removeTyping() {
+    const t = document.getElementById('typing-indicator');
+    if (t) t.remove();
+  }
+
+  function appendAssistantMessage(text, sources) {
+    const wrap = document.createElement('div');
+    wrap.className = 'message assistant';
+
+    let sourcesHtml = '';
+    if (sources && sources.length) {
+      const cards = sources.map((s, i) => `
+        <div class="source-card">
+          <strong>${i + 1}. ${escHtml(s.act)}, Section ${escHtml(s.section)} — ${escHtml(s.heading)}</strong>
+          <div class="relevance">Relevance: ${(s.relevance_score * 100).toFixed(1)}%</div>
+          <div class="excerpt">${escHtml(s.text)}…</div>
+        </div>`).join('');
+
+      sourcesHtml = `
+        <button class="sources-toggle" onclick="toggleSources(this)">📚 View Sources (${sources.length})</button>
+        <div class="sources-list">${cards}</div>`;
+    }
+
+    wrap.innerHTML = `
+      <div class="avatar">⚖️</div>
+      <div class="bubble">${formatText(text)}${sourcesHtml}</div>`;
+    chatWindow.appendChild(wrap);
+    scrollBottom();
+  }
+
+  function toggleSources(btn) {
+    const list = btn.nextElementSibling;
+    list.classList.toggle('open');
+    btn.textContent = list.classList.contains('open')
+      ? `📚 Hide Sources`
+      : `📚 View Sources (${list.querySelectorAll('.source-card').length})`;
+  }
+
+  // Basic markdown-ish formatting
+  function formatText(text) {
+    return text
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/\n/g, '<br>');
+  }
+
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  async function sendMessage() {
+    const question = inputEl.value.trim();
+    if (!question) return;
+
+    inputEl.value = '';
+    inputEl.style.height = 'auto';
+    sendBtn.disabled = true;
+
+    appendMessage('user', question);
+    showTyping();
+
+    // Snapshot history before appending current question
+    const historySnapshot = [...chatHistory];
+
+    try {
+      const res = await fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question, chat_history: historySnapshot }),
+      });
+
+      const data = await res.json();
+      removeTyping();
+
+      if (!res.ok) {
+        appendMessage('assistant', data.error || 'Something went wrong.');
+      } else {
+        appendAssistantMessage(data.answer, data.sources);
+        // Update history for future turns
+        chatHistory.push({ role: 'user',      content: question     });
+        chatHistory.push({ role: 'assistant', content: data.answer  });
+      }
+    } catch (err) {
+      removeTyping();
+      appendMessage('assistant', 'Network error — could not reach the server.');
+    }
+
+    sendBtn.disabled = false;
+    inputEl.focus();
+  }
+
+  function clearChat() {
+    chatHistory.length = 0;
+    chatWindow.innerHTML = `
+      <div class="welcome" id="welcome-msg">
+        <div class="icon">⚖️</div>
+        <h3>Ask a legal question</h3>
+        <p>Questions about bail, FIR, evidence, cognisable offences and more.</p>
+      </div>`;
+  }
+
+  // ── Eval Dashboard ──────────────────────────────────────────────────────
+  let evalPolling = null;
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      if (b.dataset.tab === tab) b.classList.add('active');
+    });
+    const chatWin  = document.getElementById('chat-window');
+    const inputBar = document.querySelector('.input-bar');
+    const evalPanel = document.getElementById('eval-panel');
+    if (tab === 'chat') {
+      chatWin.style.display  = '';
+      inputBar.style.display = '';
+      evalPanel.style.display = 'none';
+    } else {
+      chatWin.style.display  = 'none';
+      inputBar.style.display = 'none';
+      evalPanel.style.display = 'flex';
+      // Try to load existing results silently
+      loadResults();
+      // If eval is already running, resume polling
+      fetch('/eval/status').then(r => r.json()).then(s => {
+        if (s.status === 'running') startPolling();
+      });
+    }
+  }
+
+  async function runEval() {
+    const category = document.getElementById('eval-category').value;
+    const limitVal  = document.getElementById('eval-limit').value;
+    const skipLlm   = document.getElementById('eval-skip-llm').checked;
+
+    document.getElementById('eval-run-btn').disabled = true;
+    document.getElementById('eval-progress-section').style.display = 'block';
+    document.getElementById('eval-status-text').textContent = 'Starting evaluation…';
+    document.getElementById('eval-progress-fill').style.width = '0%';
+
+    const body = { skip_llm: skipLlm };
+    if (category) body.category = category;
+    if (limitVal) body.limit = parseInt(limitVal);
+
+    const res = await fetch('/eval/run', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      document.getElementById('eval-status-text').textContent = '❌ ' + (err.error || 'Failed to start');
+      document.getElementById('eval-run-btn').disabled = false;
+      return;
+    }
+    startPolling();
+  }
+
+  function startPolling() {
+    if (evalPolling) return;
+    evalPolling = setInterval(pollEvalStatus, 2000);
+  }
+
+  async function pollEvalStatus() {
+    const res = await fetch('/eval/status');
+    const state = await res.json();
+
+    if (state.status === 'running') {
+      const pct = state.total > 0 ? Math.round(state.progress / state.total * 100) : 0;
+      document.getElementById('eval-status-text').textContent =
+        `Running… ${state.progress} / ${state.total || '?'} questions  (${pct}%)`;
+      document.getElementById('eval-progress-fill').style.width = pct + '%';
+    } else if (state.status === 'done') {
+      clearInterval(evalPolling); evalPolling = null;
+      document.getElementById('eval-run-btn').disabled = false;
+      document.getElementById('eval-status-text').textContent = '✅ Evaluation complete!';
+      document.getElementById('eval-progress-fill').style.width = '100%';
+      await loadResults();
+    } else if (state.status === 'error') {
+      clearInterval(evalPolling); evalPolling = null;
+      document.getElementById('eval-run-btn').disabled = false;
+      document.getElementById('eval-status-text').textContent = '❌ Error: ' + state.error;
+    }
+  }
+
+  async function loadResults() {
+    const res = await fetch('/eval/results');
+    if (!res.ok) return;
+    const data = await res.json();
+    renderResults(data);
+  }
+
+  const METRIC_LABELS = {
+    faithfulness:         'Faithfulness',
+    answer_relevancy:     'Answer Relevancy',
+    context_relevancy:    'Context Relevancy',
+    citation_accuracy:    'Citation Accuracy',
+    keyword_recall:       'Keyword Recall',
+    source_accuracy:      'Source Accuracy',
+    semantic_correctness: 'Semantic Correctness',
+  };
+
+  function renderResults(data) {
+    if (!data || !data.summary) return;
+    document.getElementById('eval-results').style.display = 'block';
+
+    // Overall score
+    const overall = data.overall || 0;
+    const scoreEl = document.getElementById('eval-overall-score');
+    scoreEl.textContent = (overall * 100).toFixed(1) + '%';
+    scoreEl.style.color = overall >= 0.75 ? '#22c55e' : overall >= 0.5 ? '#f59e0b' : '#ef4444';
+    document.getElementById('eval-overall-sub').textContent =
+      `${data.test_count || 0} questions evaluated`;
+
+    // Metric bars
+    const metricsList = document.getElementById('eval-metrics-list');
+    metricsList.innerHTML = '';
+    for (const [key, label] of Object.entries(METRIC_LABELS)) {
+      const m = data.summary[key];
+      if (!m) continue;
+      const score = m.mean;
+      const colorClass = score >= 0.75 ? 'high' : score >= 0.5 ? 'mid' : 'low';
+      metricsList.innerHTML += `
+        <div class="metric-row">
+          <div class="metric-name">${label}</div>
+          <div class="metric-bar-wrap">
+            <div class="metric-bar-fill ${colorClass}" style="width:${(score*100).toFixed(1)}%"></div>
+          </div>
+          <div class="metric-score">${(score*100).toFixed(0)}%</div>
+          <div class="metric-range">min ${(m.min*100).toFixed(0)}% · max ${(m.max*100).toFixed(0)}%</div>
+        </div>`;
+    }
+
+    // Category breakdown
+    if (data.details) {
+      const cats = {};
+      for (const d of data.details) {
+        if (!d.category) continue;
+        if (!cats[d.category]) cats[d.category] = { scores: [], count: 0 };
+        const vals = Object.values(d.metrics);
+        if (vals.length) cats[d.category].scores.push(vals.reduce((a,b)=>a+b,0)/vals.length);
+        cats[d.category].count++;
+      }
+      const catSection = document.getElementById('eval-categories-section');
+      if (Object.keys(cats).length > 1) {
+        catSection.style.display = 'block';
+        const catList = document.getElementById('eval-categories-list');
+        catList.innerHTML = '';
+        for (const [cat, info] of Object.entries(cats)) {
+          const avg = info.scores.length
+            ? info.scores.reduce((a,b)=>a+b,0)/info.scores.length : 0;
+          const col = avg >= 0.75 ? '#22c55e' : avg >= 0.5 ? '#f59e0b' : '#ef4444';
+          catList.innerHTML += `<div class="category-pill">
+            <span class="cat-name">${escHtml(cat)}</span>
+            <span class="cat-score" style="color:${col}">${(avg*100).toFixed(1)}%</span>
+            <span class="cat-count">${info.count} question${info.count!==1?'s':''}</span>
+          </div>`;
+        }
+      }
+      renderDetailsTable(data.details);
+    }
+  }
+
+  function renderDetailsTable(details) {
+    const allMetrics = [...new Set(details.flatMap(d => Object.keys(d.metrics)))];
+    let html = `<table class="eval-detail-table"><thead><tr>
+      <th>ID</th><th>Question</th><th>Cat.</th>
+      ${allMetrics.map(m => `<th>${(METRIC_LABELS[m]||m).replace(/_/g,' ')}</th>`).join('')}
+    </tr></thead><tbody>`;
+    for (const d of details) {
+      html += `<tr>
+        <td>${escHtml(d.id)}</td>
+        <td class="question-cell">${escHtml(d.question.substring(0,70))}${d.question.length>70?'…':''}</td>
+        <td>${escHtml(d.category||'')}</td>
+        ${allMetrics.map(m => {
+          const score = d.metrics[m];
+          if (score === undefined) return '<td style="color:#4b5563">—</td>';
+          const col = score>=0.75 ? '#22c55e' : score>=0.5 ? '#f59e0b' : '#ef4444';
+          return `<td class="score-cell" style="color:${col}">${(score*100).toFixed(0)}%</td>`;
+        }).join('')}
+      </tr>`;
+    }
+    html += '</tbody></table>';
+    document.getElementById('eval-details-table').innerHTML = html;
+  }
+
+  function toggleDetails(btn) {
+    const table = document.getElementById('eval-details-table');
+    const open  = table.style.display !== 'none';
+    table.style.display = open ? 'none' : 'block';
+    btn.textContent = open ? 'Show ▼' : 'Hide ▲';
+  }
+</script>
+</body>
+</html>

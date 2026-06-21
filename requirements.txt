@@ -8,4 +8,4 @@ nltk
 sentence-transformers
 chromadb
 openai
-streamlit
+flask

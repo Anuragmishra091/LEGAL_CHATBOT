@@ -1,6 +1,101 @@
+# Environment variables (sensitive data)
 .env
+.env.local
+.env.*.local
+
+# Python cache
 __pycache__/
-*.pyc
-vectorstore/
-ingest_manifest.json
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
 venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Vector database storage
+vectorstore/
+chroma_db/
+
+# Ingestion artifacts
+ingest_manifest.json
+*.manifest.json
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.pytest_cache/
+
+# Streamlit
+.streamlit/
+
+# Large model files (if you download any locally)
+*.bin
+*.onnx
+*.pkl
+*.h5
+*.pth
+*.safetensors
+
+# PDF files (if you don't want to commit source PDFs)
+# pdfs/
+# *.pdf
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store

@@ -1,13 +1,23 @@
 import chromadb
+from pathlib import Path
 from typing import List, Dict
 from sentence_transformers import SentenceTransformer
 
 class StatuteRetriever:
-    def __init__(self, chroma_path: str = "../vectorstore", 
+    def __init__(self, chroma_path: str = str(Path(__file__).parent.parent / "vectorstore"), 
                  collection_name: str = "statutes_v1",
                  model_name: str = "all-MiniLM-L6-v2"):
         self.client = chromadb.PersistentClient(path=chroma_path)
-        self.collection = self.client.get_collection(collection_name)
+        
+        try:
+            self.collection = self.client.get_collection(collection_name)
+        except KeyError:
+            # Collection corrupted, recreate it
+            self.collection = self.client.create_collection(
+                name=collection_name,
+                metadata={"hnsw:space": "cosine"}
+            )
+        
         self.model = SentenceTransformer(model_name)
     
     def search(self, query: str, n_results: int = 5) -> List[Dict]:

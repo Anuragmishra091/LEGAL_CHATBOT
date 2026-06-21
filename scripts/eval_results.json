@@ -1,0 +1,373 @@
+{
+  "summary": {
+    "answer_relevancy": {
+      "mean": 0.692,
+      "min": 0.602,
+      "max": 0.803,
+      "count": 15
+    },
+    "citation_accuracy": {
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "count": 15
+    },
+    "context_relevancy": {
+      "mean": 0.548,
+      "min": 0.304,
+      "max": 0.633,
+      "count": 15
+    },
+    "keyword_recall": {
+      "mean": 0.784,
+      "min": 0.2,
+      "max": 1.0,
+      "count": 15
+    },
+    "semantic_correctness": {
+      "mean": 0.7,
+      "min": 0.506,
+      "max": 0.819,
+      "count": 15
+    },
+    "source_accuracy": {
+      "mean": 0.752,
+      "min": 0.0,
+      "max": 1.0,
+      "count": 15
+    }
+  },
+  "overall": 0.746,
+  "details": [
+    {
+      "id": "CONST_01",
+      "question": "What does Article 21 of the Constitution guarantee?",
+      "category": "constitution",
+      "answer": "Article 21 of the Constitution of India, which falls under Part III — FUNDAMENTAL RIGHTS, guarantees the protection of life and personal liberty. It states that \"No person shall be deprived of his life or personal liberty except according to procedure established by law.\" (Source 3: Constitution of India, Part III — FUNDAMENTAL RIGHTS, Article 21 — Protection of life and personal liberty)",
+      "sources": [
+        "Art.380",
+        "Art.225",
+        "Art.21",
+        "Art.369",
+        "Art.360"
+      ],
+      "metrics": {
+        "answer_relevancy": 0.6274619102478027,
+        "context_relevancy": 0.5648595690727234,
+        "citation_accuracy": 1.0,
+        "keyword_recall": 1.0,
+        "source_accuracy": 1.0,
+        "semantic_correctness": 0.8188291788101196
+      },
+      "time_s": 16.59
+    },
+    {
+      "id": "CONST_02",
+      "question": "What are the fundamental rights under Part III?",
+      "category": "constitution",
+      "answer": "The fundamental rights under Part III of the Constitution of India are guaranteed by various articles. Specifically, Article 19 (Part III — FUNDAMENTAL RIGHTS) protects certain rights regarding freedom of speech, etc., which includes the right to:\n\n(a) freedom of speech and expression;\n(b) assemble peaceably and without arms;\n(c) form associations or unions or co-operative societies;\n(d) move freely throughout the territory of India;\n(e) reside and settle in any part of the territory of India; \n",
+      "sources": [
+        "Art.41",
+        "Art.359",
+        "Art.19",
+        "Art.37",
+        "Art.32"
+      ],
+      "metrics": {
+        "answer_relevancy": 0.6967817544937134,
+        "context_relevancy": 0.5253490209579468,
+        "citation_accuracy": 1.0,
+        "keyword_recall": 0.2,
+        "source_accuracy": 0.5,
+        "semantic_correctness": 0.6673616766929626
+      },
+      "time_s": 13.22
+    },
+    {
+      "id": "CONST_03",
+      "question": "Can fundamental rights be suspended during emergency?",
+      "category": "constitution",
+      "answer": "According to the Constitution of India, Part XVIII — EMERGENCY PROVISIONS, Article 359, the President may by order declare that the right to move any court for the enforcement of such of the rights conferred by Part III (except articles 20 and 21) as may be mentioned in the order shall remain suspended for the period during which the Proclamation is in force or for such shorter period as may be specified in the order.\n\nAdditionally, Article 358 of the Constitution of India states that while a Pr",
+      "sources": [
+        "Art.359",
+        "Art.358",
+        "Art.353",
+        "Art.250",
+        "Art.19"
+      ],
+      "metrics": {
+        "answer_relevancy": 0.6044920086860657,
+        "context_relevancy": 0.48503631353378296,
+        "citation_accuracy": 1.0,
+        "keyword_recall": 0.625,
+        "source_accuracy": 0.75,
+        "semantic_correctness": 0.699113130569458
+      },
+      "time_s": 8.56
+    },
+    {
+      "id": "CONST_04",
+      "question": "What is the amendment procedure of the Constitution?",
+      "category": "constitution",
+      "answer": "The amendment procedure of the Constitution of India is outlined in Article 368 of Part XX of the Constitution. According to Article 368(1), Parliament may amend the Constitution by way of addition, variation, or repeal of any provision, in accordance with the procedure laid down in this article.\n\nThe procedure involves the introduction of a Bill for the purpose in either House of Parliament, which must be passed by a majority of the total membership of that House and by a majority of not less t",
+      "sources": [
+        "Art.368",
+        "Art.208",
+        "Art.244",
+        "Art.225",
+        "Art.145"
+      ],
+      "metrics": {
+        "answer_relevancy": 0.6876444816589355,
+        "context_relevancy": 0.5676261782646179,
+        "citation_accuracy": 1.0,
+        "keyword_recall": 0.8,
+        "source_accuracy": 1.0,
+        "semantic_correctness": 0.7787653803825378
+      },
+      "time_s": 10.67
+    },
+    {
+      "id": "CONST_05",
+      "question": "What is the right to equality under the Constitution?",
+      "category": "constitution",
+      "answer": "The right to equality under the Constitution of India is enshrined in Article 14 of Part III — Fundamental Rights. According to Article 14, \"The State shall not deny to any person equality before the law or the equal protection of the laws within the territory of India.\" This means that the State cannot discriminate against any individual and must treat all persons equally under the law.\n\nAdditionally, Article 32 of Part III — Fundamental Rights, provides remedies for the enforcement of the righ",
+      "sources": [
+        "Art.14",
+        "Art.32",
+        "Art.41",
+        "Art.11",
+        "Art.39"
+      ],
+      "metrics": {
+        "answer_relevancy": 0.6919334530830383,
+        "context_relevancy": 0.5169979333877563,
+        "citation_accuracy": 1.0,
+        "keyword_recall": 0.3333333333333333,
+        "source_accuracy": 0.2,
+        "semantic_correctness": 0.6732156276702881
+      },
+      "time_s": 16.03
+    },
+    {
+      "id": "BNS_01",
+      "question": "What is the punishment for murder under BNS?",
+      "category": "bns",
+      "answer": "The provided context does not explicitly state the punishment for murder under BNS. However, it can be inferred from Section BNS_sec_56 (Source 1) that if the offence of murder is punishable with death or imprisonment for life, the abettor shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine.\n\nAdditionally, Section BNS_sec_218 (Source 3) mentions that if the offence which the person knows or believes to have been c",
+      "sources": [
+        "BNS_sec_56",
+        "Whoever attempts to commit suicide with the intent to compel or restrain any\npublic servant from discharging his official duty shall be punished with simple imprisonment\nfor a term which may extend to one year, or with fine, or with both, or with community\nservice.\nCHAPTERXIV",
+        "BNS_sec_218",
+        "BNSS_sec_496",
+        "-0___jonew__judis__12978"
+      ],
+      "metrics": {
+        "answer_relevancy": 0.6905544996261597,
+        "context_relevancy": 0.5489786863327026,
+        "citation_accuracy": 1.0,
+        "keyword_recall": 1.0,
+        "source_accuracy": 1.0,
+        "semantic_correctness": 0.703161895275116
+      },
+      "time_s": 8.76
+    },
+    {
+      "id": "BNS_02",
+      "question": "What is the definition of theft under BNS?",
+      "category": "bns",
+      "answer": "According to Section 303(1) of the BNS, \"Whoever, intending to take dishonestly any movable property out of the possession of any person without that person’s consent, moves that property in order to such taking, is said to commit theft.\"\n\nThis section also provides explanations to clarify the definition of theft, including:\n\n- Explanation 1: A thing attached to the earth is not movable property and cannot be the subject of theft until it is severed from the earth.\n- Explanation 2: A moving effe",
+      "sources": [
+        "Whoever commits theft, having made preparation for causing death, or hurt, or\nrestraint, or fear of death, or of hurt, or of restraint, to any person, in order to the committing\nof such theft, or in order to the effecting of his escape after the committing of such theft, or\nin order to the retaining of property taken by such theft, shall be punished with rigorous\nimprisonment for a term which may extend to ten years, and shall also be liable to fine.",
+        "BNS_sec_103",
+        "BNSS_sec_589",
+        "XVII",
+        "XIV"
+      ],
+      "metrics": {
+        "answer_relevancy": 0.6019152998924255,
+        "context_relevancy": 0.5442432165145874,
+        "citation_accuracy": 1.0,
+        "keyword_recall": 1.0,
+        "source_accuracy": 1.0,
+        "semantic_correctness": 0.7636186480522156
+      },
+      "time_s": 5.59
+    },
+    {
+      "id": "BNSS_01",
+      "question": "What are the provisions for bail under BNSS?",
+      "category": "bnss",
+      "answer": "The provisions for bail under the Bharatiya Nyaya Sanhita, 2023 (BNSS) are outlined in Chapter XXXV, which deals with \"Provisions as to Bail and Bonds\". \n\nAccording to Section XXXV (2) of the BNSS, if it appears that there are not reasonable grounds for believing that the accused has committed a non-bailable offence, but that there are sufficient grounds for further inquiry into his guilt, the accused shall be released on bail, subject to certain provisions.\n\nSection 478 (1) of the BNSS states t",
+      "sources": [
+        "XXXV",
+        "XXXV",
+        "XXXV",
+        "XXXV",
+        "BNSS_sec_651"
+      ],
+      "metrics": {
+        "answer_relevancy": 0.7579212188720703,
+        "context_relevancy": 0.6121643781661987,
+        "citation_accuracy": 1.0,
+        "keyword_recall": 0.8,
+        "source_accuracy": 1.0,
+        "semantic_correctness": 0.7368282079696655
+      },
+      "time_s": 10.51
+    },
+    {
+      "id": "BNSS_02",
+      "question": "How to file an FIR under BNSS?",
+      "category": "bnss",
+      "answer": "Based on the provided context, there is no information about the procedure to file an FIR under BNSS. The context only provides information about court judgments and sections of various acts, but it does not contain any information about the BNSS act or the procedure to file an FIR under it.\n\nIf you are looking for information on how to file an FIR, it is generally done by visiting the local police station and providing a written complaint to the officer in charge. However, without more informat",
+      "sources": [
+        "-0___jonew__judis__14635",
+        "-0___jonew__judis__15537",
+        "-0___jonew__judis__13696",
+        "-0___jonew__judis__15531",
+        "A person abets an offence within the meaning of this Sanhita who, without and\nbeyond India, abets the commission of any act in India which would constitute an offence if\ncommitted in India.\nAbetment in\nIndia of"
+      ],
+      "metrics": {
+        "answer_relevancy": 0.8030478954315186,
+        "context_relevancy": 0.3035508990287781,
+        "citation_accuracy": 1.0,
+        "keyword_recall": 0.4,
+        "source_accuracy": 0.0,
+        "semantic_correctness": 0.5069737434387207
+      },
+      "time_s": 11.01
+    },
+    {
+      "id": "JDG_01",
+      "question": "What did the Supreme Court decide in the Union Carbide Bhopal gas case regarding compensation?",
+      "category": "judgment",
+      "answer": "In the Union Carbide Bhopal gas case, the Supreme Court decided that the Union of India and Union Carbide Corporation (UCC) had reached a settlement, as stated in the memorandum filed on 15th February, 1989 (Section -0___jonew__judis__12603). The settlement provided for a payment of $470 million by UCC to the Union of India, which would finally dispose of all past, present, and future claims, causes of action, and civil and criminal proceedings against UCC and its subsidiaries and affiliates (Se",
+      "sources": [
+        "-0___jonew__judis__12603",
+        "-0___jonew__judis__12603",
+        "-0___jonew__judis__12603",
+        "-0___jonew__judis__12603",
+        "-0___jonew__judis__14452"
+      ],
+      "metrics": {
+        "answer_relevancy": 0.7138423919677734,
+        "context_relevancy": 0.6310594081878662,
+        "citation_accuracy": 1.0,
+        "keyword_recall": 1.0,
+        "source_accuracy": 1.0,
+        "semantic_correctness": 0.6964733004570007
+      },
+      "time_s": 18.57
+    },
+    {
+      "id": "JDG_02",
+      "question": "What is the Supreme Court's position on contempt of court by an advocate?",
+      "category": "judgment",
+      "answer": "The Supreme Court's position on contempt of court by an advocate is that the Court has the power to punish for contempt of itself under Article 129 of the Constitution of India. This power includes the ability to take action against advocates who commit contempt of court. \n\nAs stated in the judgment, \"the freedom of speech and expression cannot be used for committing contempt of court nor can the legal profession be practised by committing the contempt of court\" (Source 1: SUPREME_COURT_JUDGMENT",
+      "sources": [
+        "-0___jonew__judis__10844",
+        "-0___jonew__judis__15052",
+        "-0___jonew__judis__10897",
+        "-0___jonew__judis__10844",
+        "-0___jonew__judis__10844"
+      ],
+      "metrics": {
+        "answer_relevancy": 0.6921398639678955,
+        "context_relevancy": 0.6311219334602356,
+        "citation_accuracy": 1.0,
+        "keyword_recall": 1.0,
+        "source_accuracy": 1.0,
+        "semantic_correctness": 0.7517866492271423
+      },
+      "time_s": 12.81
+    },
+    {
+      "id": "JDG_03",
+      "question": "What are the Supreme Court guidelines on land acquisition and compensation?",
+      "category": "judgment",
+      "answer": "Based on the provided context, the Supreme Court guidelines on land acquisition and compensation can be summarized as follows:\n\n1. **Section 4(1) of the Land Acquisition Act, 1894**: Notification under this section is crucial for initiating the land acquisition process. (Source 1: SUPREME_COURT_JUDGMENT, Section -0___jonew__judis__10629)\n2. **Section 23(1-A) of the Land Acquisition Act, 1894**: The court has held that respondents are not entitled to additional compensation under this section if ",
+      "sources": [
+        "-0___jonew__judis__10629",
+        "-0___jonew__judis__15044",
+        "-0___jonew__judis__11714",
+        "-0___jonew__judis__15152",
+        "-0___jonew__judis__15045"
+      ],
+      "metrics": {
+        "answer_relevancy": 0.7489781379699707,
+        "context_relevancy": 0.6329656839370728,
+        "citation_accuracy": 1.0,
+        "keyword_recall": 1.0,
+        "source_accuracy": 1.0,
+        "semantic_correctness": 0.7784761190414429
+      },
+      "time_s": 41.97
+    },
+    {
+      "id": "CROSS_01",
+      "question": "What is the right to life under Article 21 and how have courts interpreted it?",
+      "category": "cross_domain",
+      "answer": "The right to life under Article 21 of the Constitution of India, Part III — FUNDAMENTAL RIGHTS, states that \"No person shall be deprived of his life or personal liberty except according to procedure established by law.\" This article has been interpreted by courts to include not just the physical aspect of life, but also the quality of life.\n\nThe Supreme Court of India has given a broad interpretation to Article 21, holding that it encompasses the right to live with dignity, the right to health, ",
+      "sources": [
+        "Art.21",
+        "Art.225",
+        "Art.214",
+        "Art.19",
+        "Art.32"
+      ],
+      "metrics": {
+        "answer_relevancy": 0.6842988729476929,
+        "context_relevancy": 0.5419015884399414,
+        "citation_accuracy": 1.0,
+        "keyword_recall": 1.0,
+        "source_accuracy": 0.5,
+        "semantic_correctness": 0.7265406847000122
+      },
+      "time_s": 24.53
+    },
+    {
+      "id": "CONST_06",
+      "question": "What are directive principles of state policy?",
+      "category": "constitution",
+      "answer": "The Directive Principles of State Policy (DPSP) are guidelines or principles that are laid down in Part IV of the Constitution of India, which are fundamental in the governance of the country. As stated in Article 37 of the Constitution of India, Part IV, \"The provisions contained in this Part shall not be enforceable by any court, but the principles therein laid down are nevertheless fundamental in the governance of the country and it shall be the duty of the State to apply these principles in ",
+      "sources": [
+        "Art.37",
+        "Art.256",
+        "Art.39",
+        "Art.369"
+      ],
+      "metrics": {
+        "answer_relevancy": 0.7352200150489807,
+        "context_relevancy": 0.5549485087394714,
+        "citation_accuracy": 1.0,
+        "keyword_recall": 1.0,
+        "source_accuracy": 0.3333333333333333,
+        "semantic_correctness": 0.6959170699119568
+      },
+      "time_s": 23.6
+    },
+    {
+      "id": "BSA_01",
+      "question": "What are the provisions related to evidence under BSA?",
+      "category": "bsa",
+      "answer": "Under the BSA (Indian Evidence Act), the provisions related to evidence are as follows:\n\n1. **Primary Evidence**: According to Section 57 of the BSA, primary evidence means the document itself produced for the inspection of the Court. This section also provides explanations for various scenarios, including:\n\t* Explanation 1: Where a document is executed in several parts, each part is primary evidence of the document.\n\t* Explanation 2: Where a document is executed in counterpart, each counterpart",
+      "sources": [
+        "Documents shall be proved by primary evidence except in the cases hereinafter\nmentioned.\nSecondary\nevidence.\nProof of",
+        "BSA_sec_20",
+        "BSA_sec_60",
+        "BSA_sec_1",
+        "IV"
+      ],
+      "metrics": {
+        "answer_relevancy": 0.6502488851547241,
+        "context_relevancy": 0.5568861961364746,
+        "citation_accuracy": 1.0,
+        "keyword_recall": 0.6,
+        "source_accuracy": 1.0,
+        "semantic_correctness": 0.5056633949279785
+      },
+      "time_s": 32.67
+    }
+  ],
+  "test_count": 15
+}
